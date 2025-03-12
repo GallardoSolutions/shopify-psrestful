@@ -67,7 +67,7 @@ SPECS = (
          field_type='number_integer'),
     # Variant
     Spec(name='Variant GTIN', key='variant_gtin', description='Global Trade Item Number',
-         field_type='single_line_text_field'),
+         field_type='single_line_text_field', owner_type='ProductVariant'),
 )
 
 
@@ -82,7 +82,6 @@ def create_meta_fields_from_specs(shopify_domain, access_token, meta_field_specs
 def create_metafield(name: str, key: str, description: str,
                      namespace: str = 'psrestful',
                      field_type: str = 'single_line_text_field', owner_type: str = 'PRODUCT'):
-    import pdb; pdb.set_trace()
     # https://shopify.dev/docs/apps/build/custom-data/metafields/list-of-data-types
     query = '''
     mutation CreateMetafieldDefinition($definition: MetafieldDefinitionInput!) {
