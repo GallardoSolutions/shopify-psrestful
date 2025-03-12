@@ -1,0 +1,25 @@
+[project]
+name = "shopify_psrestful"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "Edilio Gallardo",email = "edilio@gallardo.solutions"}
+]
+packages = [
+    { include = "shopify_psrestful", from = "src" },
+]
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "tenacity (>=9.0.0,<10.0.0)",
+    "shopifyapi (==12.7.0)",
+    "python-dotenv (>=1.0.1,<2.0.0)"
+]
+
+[tool.poetry]
+packages = [{include = "shopify_psrestful", from = "src"}]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
