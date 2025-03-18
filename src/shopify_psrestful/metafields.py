@@ -2,6 +2,7 @@ import logging
 
 from dataclasses import dataclass
 
+from tenacity import retry, stop_after_attempt, wait_fixed
 import shopify
 
 from shopify_psrestful.client import get_shopify_session
@@ -114,3 +115,24 @@ def create_metafield(name: str, key: str, description: str,
 
     response = shopify.GraphQL().execute(query, variables)
     return response
+
+
+def get_supplier_and_product_id(product) -> (str, str):
+    metafields = get_metafields(product)
+    supplier_code = None
+    product_id = None
+    for metafield in metafields:
+        if is_field(metafield, 'supplier_code'):
+            supplier_code = metafield.value
+        if is_field(metafield, 'product_id'):
+            product_id = metafield.value
+    return supplier_code, product_id
+
+
+@retry(stop=stop_after_attempt(3), wait=wait_fixed(1))
+def get_metafields(product):
+    return product.metafields()
+
+
+def is_field(metafield, key, namespace='psrestful'):
+    return metafield.namespace == namespace and metafield.key == key

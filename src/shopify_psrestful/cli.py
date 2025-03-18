@@ -1,12 +1,30 @@
 #!/usr/bin/env python
 import argparse
+import logging
+
 from dotenv import load_dotenv
 
+from shopify_psrestful.inventory import InventoryService
 from shopify_psrestful.metafields import create_meta_fields_from_specs
 from shopify_psrestful import settings
 
 
+def init_logger():
+    log_file = "debug.log"
+    # Configure the logger
+    logging.basicConfig(
+        level=logging.INFO,  # Set the default log level
+        format="%(asctime)s - %(levelname)s - %(message)s",  # Format with timestamp, level, and message
+        datefmt="%Y-%m-%d %H:%M:%S",
+        handlers=[
+            logging.StreamHandler(),  # Log to console
+            logging.FileHandler(log_file, mode="a"),  # Log to file (append mode)
+        ],
+    )
+
+
 def main():
+    init_logger()
     load_dotenv()
     parser = argparse.ArgumentParser(description="Shopify PSRESTful CLI")
 
@@ -21,7 +39,7 @@ def main():
         create_meta_fields_from_specs(shopify_domain, token)
         print("Metafields created successfully.")
     elif cms == 'update-inventory':
-        #
+        InventoryService().update_inventory()
         print("Updating inventory...")
     else:
         print("Unknown command.")
